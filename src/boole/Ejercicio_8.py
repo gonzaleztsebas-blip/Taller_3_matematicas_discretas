@@ -1,12 +1,16 @@
 def convertir_a_binario(n, num_variables):
+    # pasa un mintermino (numero) a su representacion binaria,
+    # como lista de bits, con tantas posiciones como variables
     bits = []
-    for i in range (num_variables):
-        bit = (n//2**i) % 2
+    for i in range(num_variables):
+        bit = (n // 2**i) % 2
         bits.append(bit)
     bits.reverse()
     return bits
 
 def difieren_en_un_bit(bits1, bits2):
+    # revisa si dos terminos solo se diferencian en una posicion
+    # (esa es la condicion para poder combinarlos y simplificar)
     if len(bits1) != len(bits2):
         return False, -1
 
@@ -20,30 +24,30 @@ def difieren_en_un_bit(bits1, bits2):
 
     if contador_diferencias == 1:
         return True, posicion_diferencia
-
     else:
         return False, -1
 
 def de_bits_a_string(bits):
+    # convierte la lista de bits en un string, mas facil de comparar y guardar
     resultado = ""
-
     for bit in bits:
         resultado += str(bit)
-
     return resultado
 
 def combinacion(bits, posicion_diferencia):
+    # combina dos terminos poniendo un guion en la posicion donde difieren
+    # (el guion significa "esta variable ya no importa")
     resultado = ""
-
     for i in range(len(bits)):
         if i == posicion_diferencia:
             resultado += "-"
         else:
             resultado += bits[i]
-
     return resultado
 
 def agrupar_terminos(terminos):
+    # intenta combinar cada par de terminos que difieran en un solo bit
+    # los que no se pudieron combinar con nadie quedan como terminos finales
     combinados = set()
     usados = set()
 
@@ -68,6 +72,8 @@ def agrupar_terminos(terminos):
     return combinados, no_combinados
 
 def simplificar(min_terminos, num_variables):
+    # version reducida de Quine-McCluskey: agrupa terminos una y otra vez
+    # hasta que ya no se puede combinar mas nada, y devuelve lo que quede
     terminos_actuales = []
     for m in min_terminos:
         bits = convertir_a_binario(m, num_variables)
@@ -89,6 +95,8 @@ def simplificar(min_terminos, num_variables):
     return list(set(terminos_finales))
 
 def termino_a_expresion(termino, nombres_variables):
+    # traduce un termino tipo "1-0" a algo legible como "(A ∧ ¬C)"
+    # los guiones se ignoran porque esa variable ya no aparece
     partes = []
     for i in range(len(termino)):
         caracter = termino[i]
@@ -107,6 +115,8 @@ def termino_a_expresion(termino, nombres_variables):
 
 
 def verificar_equivalencia(mintermos_originales, terminos_simplificados, num_variables):
+    # comprueba, entrada por entrada, que la expresion simplificada
+    # de 1 exactamente en los mismos casos que los mintermos originales
     total_combinaciones = 2 ** num_variables
 
     for n in range(total_combinaciones):
@@ -132,7 +142,6 @@ def verificar_equivalencia(mintermos_originales, terminos_simplificados, num_var
             return False
 
     return True
-
 
 if __name__ == "__main__":
     mintermos = [1, 3, 5, 7]
