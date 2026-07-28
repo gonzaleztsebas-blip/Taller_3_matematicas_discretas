@@ -1,4 +1,5 @@
 def es_primo(num):
+    """Prueba de primalidad por división: revisa divisores hasta sqrt(num)."""
     if num < 2:
         return False
     for i in range(2, int(num**0.5) + 1):
@@ -7,6 +8,8 @@ def es_primo(num):
     return True
 
 def n(p, q):
+    """Módulo RSA: n = p*q. Su factorización es lo que da la seguridad real
+    (aquí p y q son pequeños, así que romperlo es trivial; es solo ilustrativo)."""
     return p*q
 
 def phi(p, q):
