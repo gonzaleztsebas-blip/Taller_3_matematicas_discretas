@@ -66,4 +66,4 @@ Cada ejercicio es un script independiente y se ejecuta por separado.
 
 La explicación matemática detallada de cada punto (qué problema resuelve,
 qué idea matemática usa, cómo se ejecuta, qué pruebas se hicieron y qué
-limitaciones tiene) está en el PDF dentro de `docs/`.
+limitaciones tiene) está en el PDF adjunto a la entrega.
