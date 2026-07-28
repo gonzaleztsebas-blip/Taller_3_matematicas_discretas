@@ -19,17 +19,20 @@ grafo = {
 }
 
 def coloreo_voraz(grafo):
+    # va asignando colores nodo por nodo, en el orden en que aparecen
+    # en el diccionario, sin mirar hacia adelante
     colores = {}
 
     for nodo in grafo:
         colores_vecinos = set()
-        
+
+        # se fija que colores ya usaron los vecinos que ya tienen color
         for (vecino, _) in grafo[nodo]:
             if vecino in colores:
                 colores_vecinos.add(colores[vecino])
 
+        # le da al nodo el primer color disponible que ningun vecino tenga
         color_candidato = 0
-
         while color_candidato in colores_vecinos:
             color_candidato += 1
 
@@ -38,7 +41,7 @@ def coloreo_voraz(grafo):
     return colores
 
 def verificar_colores(grafo, colores):
-
+    # revisa que no haya dos nodos conectados con el mismo color
     for nodo in grafo:
         for (vecino, _) in grafo[nodo]:
             if colores[nodo] == colores[vecino]:

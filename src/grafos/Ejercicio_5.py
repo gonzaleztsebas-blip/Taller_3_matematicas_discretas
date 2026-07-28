@@ -75,19 +75,18 @@ def cerrar_vertice(grafo, vertice):
     esa estacion).
     """
     nuevo_grafo = copy.deepcopy(grafo)
- 
-    # Eliminar el vertice como nodo
+
+    # quitar el vertice como nodo
     if vertice in nuevo_grafo:
         del nuevo_grafo[vertice]
- 
-    # Eliminar todas las aristas que apuntaban hacia ese vertice
+
+    # quitar las aristas que apuntaban hacia ese vertice
     for nodo in nuevo_grafo:
         nuevo_grafo[nodo] = [
             (vecino, peso) for vecino, peso in nuevo_grafo[nodo] if vecino != vertice
         ]
- 
+
     return nuevo_grafo
- 
  
 def cerrar_arista(grafo, u, v):
     """

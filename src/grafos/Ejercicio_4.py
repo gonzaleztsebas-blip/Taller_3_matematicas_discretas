@@ -19,6 +19,8 @@ grafo = {
 }
 
 def encontrar_menor(distancias, visitados):
+    # entre los nodos que faltan por visitar, busca el de menor distancia
+    # acumulada (esa es la version "a mano" de la cola de prioridad de Dijkstra)
     actual = None
     menor_distancia = float('inf')
     for nodo in distancias:
@@ -28,33 +30,39 @@ def encontrar_menor(distancias, visitados):
                 actual = nodo
     return actual
 
-origen = input("Ingrese el nodo de salida (A-Q) ").upper().strip()
-destino = input("Ingrese el nodo de destino (A-Q) ").upper().strip()
 
-if origen not in grafo or destino not in grafo:
-    print("Error: uno de los nodos ingresados no existe en el grafo.")
-else:
+def dijkstra(grafo, origen, destino):
+    """
+    Encuentra la ruta mas corta entre origen y destino en un grafo
+    ponderado con pesos positivos.
+
+    Va marcando nodos como visitados en orden de menor distancia
+    acumulada, y para cada vecino no visitado revisa si pasar por el
+    nodo actual da una distancia mas corta que la que tenia antes
+    (relajacion de aristas). Al final reconstruye la ruta siguiendo
+    los "anteriores" desde el destino hasta el origen.
+
+    Devuelve (ruta, distancia). Si no hay camino, ruta es None y
+    distancia es float('inf').
+    """
     distancias = {}
     anteriores = {}
     visitados = set()
 
     for nodo in grafo:
-        if nodo == origen:
-            distancias[nodo] = 0
-        else:
-            distancias[nodo] = float('inf')
+        distancias[nodo] = 0 if nodo == origen else float('inf')
         anteriores[nodo] = None
 
     while True:
         actual = encontrar_menor(distancias, visitados)
-        
+
         if actual is None:
             break
         if actual == destino:
             break
-        
+
         visitados.add(actual)
-        
+
         for vecino, peso in grafo[actual]:
             if vecino not in visitados:
                 nueva_distancia = distancias[actual] + peso
@@ -63,14 +71,29 @@ else:
                     anteriores[vecino] = actual
 
     if distancias[destino] == float('inf'):
-        print(f"No existe camino entre {origen} y {destino}.")
-    else:
-        ruta = []
-        nodo = destino
-        while nodo is not None:
-            ruta.append(nodo)
-            nodo = anteriores[nodo]
-        ruta.reverse()
+        return None, float('inf')
 
-        print(f"Ruta: {ruta}")
-        print(f"Distancia total: {distancias[destino]}")
+    ruta = []
+    nodo = destino
+    while nodo is not None:
+        ruta.append(nodo)
+        nodo = anteriores[nodo]
+    ruta.reverse()
+
+    return ruta, distancias[destino]
+
+
+if __name__ == "__main__":
+    origen = input("Ingrese el nodo de salida (A-Q) ").upper().strip()
+    destino = input("Ingrese el nodo de destino (A-Q) ").upper().strip()
+
+    if origen not in grafo or destino not in grafo:
+        print("Error: uno de los nodos ingresados no existe en el grafo.")
+    else:
+        ruta, distancia = dijkstra(grafo, origen, destino)
+
+        if ruta is None:
+            print(f"No existe camino entre {origen} y {destino}.")
+        else:
+            print(f"Ruta: {ruta}")
+            print(f"Distancia total: {distancia}")
